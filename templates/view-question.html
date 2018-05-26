@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ question.question_title }} - My Q&A</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <div class="content">
+            <h1>{{ question.question_title }}</h1>
+            <p>{{ question.question_text|safe }}</p>
+            <p class="questiondetails"><span style="float: left">Posted on <strong>{{ question.date_posted }}</strong></span><span style="float: right">Posted by <strong>{{ question.posted_by }}</strong></span></p>
+            <div id="answers">
+            {% for answer in answers %}
+                    {{ answer.answer_text|safe }}
+                    <p class="answerdetails"><span style="float: left">Posted on <strong>{{ answer.date_posted }}</strong></span><span style="float: right">Posted by <strong>{{ answer.posted_by }}</strong></span></p>
+            {% endfor %}
+            </div>
+            <!-- <form class="reply" action="" method="post"> -->
+                {% csrf_token %}
+                <textarea name="answer" id="answer" rows="8" cols="80" placeholder="What's your answer?"></textarea><p />
+                <input type="text" id="posted_by" name="posted_by" value="" autocomplete="off" placeholder="Enter your name ..."><p />
+                <input type="hidden" id="qid" name="qid" value="{{ question.qid }}">
+                <button name="answer_question" id="answer_question">Answer Question</button>
+            <!-- </form> -->
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </div>
+        <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/core.js' %}"></script>
+        <script type="text/javascript">
+            var csrftoken = getCookie("csrftoken");
+        </script>
+    </body>
+</html>
